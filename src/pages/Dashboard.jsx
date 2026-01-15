@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useFinance, MESES } from '../context/FinanceContext'
+import { useToast } from '../components/Toast'
 import { formatCurrency, formatPercent } from '../utils/formatters'
 import MetricCard from '../components/MetricCard'
 import { TrendingUp, TrendingDown, Wallet, PiggyBank, Download, Upload, Trash2 } from 'lucide-react'
@@ -29,6 +30,7 @@ ChartJS.register(
 
 function Dashboard() {
   const { data, calcularTotal, calcularSaldoAcumulado, exportarDados, importarDados, limparTudo, selectedYear } = useFinance()
+  const { addToast } = useToast()
   const fileInputRef = useRef(null)
 
   const calcularTotaisAno = () => {
@@ -156,9 +158,9 @@ function Dashboard() {
     if (file) {
       try {
         await importarDados(file)
-        alert('Dados importados com sucesso!')
+        addToast('Dados importados com sucesso!', 'success')
       } catch (error) {
-        alert('Erro ao importar dados. Verifique o arquivo.')
+        addToast('Erro ao importar dados. Verifique o arquivo.', 'error')
       }
     }
   }
@@ -166,7 +168,7 @@ function Dashboard() {
   const handleClear = () => {
     if (window.confirm('Tem certeza que deseja limpar todos os dados do ano? Esta ação não pode ser desfeita.')) {
       limparTudo()
-      alert('Dados limpos com sucesso!')
+      addToast('Dados limpos com sucesso!', 'success')
     }
   }
 

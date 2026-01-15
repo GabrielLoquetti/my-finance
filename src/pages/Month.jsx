@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom'
 import { useFinance, MESES, CATEGORIAS } from '../context/FinanceContext'
+import { useToast } from '../components/Toast'
 import { formatCurrency } from '../utils/formatters'
 import MetricCard from '../components/MetricCard'
 import { TrendingUp, TrendingDown, Calendar as CalendarIcon, Wallet, Wand2, Eraser } from 'lucide-react'
@@ -17,6 +18,7 @@ function Month() {
     aplicarPrevisao,
     limparMes
   } = useFinance()
+  const { addToast } = useToast()
 
   const totalReceitas = calcularTotal(month, 'receitas')
   const totalFixas = calcularTotal(month, 'despesasFixas')
@@ -30,12 +32,14 @@ function Month() {
   const handleAplicarPrevisao = () => {
     if (window.confirm('Deseja aplicar a previsão baseada nos meses anteriores?')) {
       aplicarPrevisao(month)
+      addToast('Previsão aplicada com sucesso!', 'success')
     }
   }
 
   const handleLimpar = () => {
     if (window.confirm('Deseja limpar todos os dados deste mês?')) {
       limparMes(month)
+      addToast('Dados do mês limpos!', 'success')
     }
   }
 
@@ -181,7 +185,7 @@ function Month() {
             <span className="summary-value">{formatCurrency(saldoMes)}</span>
           </div>
           <div className="summary-item summary-banco">
-            <span className="summary-label">💰 Saldo Acumulado no Banco</span>
+            <span className="summary-label">Saldo Acumulado no Banco</span>
             <span className="summary-value highlight">{formatCurrency(saldoAcumulado)}</span>
           </div>
         </div>

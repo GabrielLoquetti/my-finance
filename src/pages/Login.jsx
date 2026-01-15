@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { Lock, User, AlertCircle } from 'lucide-react'
+import { Lock, User, AlertCircle, TrendingUp } from 'lucide-react'
 
 function Login() {
   const [username, setUsername] = useState('')
@@ -33,75 +33,101 @@ function Login() {
   }
 
   return (
-    <div className="login-page">
-      <div className="login-background">
-        <div className="login-pattern"></div>
+    <div className="login-page-new">
+      {/* Lado esquerdo - Branding (apenas desktop) */}
+      <div className="login-brand">
+        <div className="brand-content">
+          <div className="brand-icon">
+            <TrendingUp size={48} />
+          </div>
+          <h1 className="brand-title">MyFinance</h1>
+          <p className="brand-tagline">Controle total das suas finanças</p>
+
+          <div className="brand-features">
+            <div className="feature-item">
+              <div className="feature-check">✓</div>
+              <span>Organize receitas e despesas</span>
+            </div>
+            <div className="feature-item">
+              <div className="feature-check">✓</div>
+              <span>Planejamento financeiro 50/30/20</span>
+            </div>
+            <div className="feature-item">
+              <div className="feature-check">✓</div>
+              <span>Dados seguros e criptografados</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="login-container">
-        <div className="login-box">
-          <div className="login-header">
-            <div className="login-logo">
-              <div className="logo-icon-large">💰</div>
-              <h1>MyFinance</h1>
+      {/* Lado direito - Formulário */}
+      <div className="login-form-section">
+        <div className="login-form-container">
+          {/* Logo mobile */}
+          <div className="mobile-brand">
+            <div className="mobile-icon">
+              <TrendingUp size={32} />
             </div>
-            <p className="login-subtitle">Sistema de Gestão Financeira Pessoal</p>
+            <h2>MyFinance</h2>
           </div>
 
-          <form onSubmit={handleSubmit} className="login-form">
-            <div className="form-group">
-              <label htmlFor="username">
-                <User size={18} />
-                <span>Usuário</span>
-              </label>
+          <div className="login-welcome">
+            <h3>Bem-vindo de volta</h3>
+            <p>Entre para gerenciar suas finanças</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="login-form-new">
+            <div className="input-wrapper">
+              <div className="input-icon">
+                <User size={20} />
+              </div>
               <input
-                id="username"
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="Digite seu usuário"
+                placeholder="Usuário"
                 required
                 autoComplete="username"
                 disabled={loading}
+                className="input-modern"
               />
             </div>
 
-            <div className="form-group">
-              <label htmlFor="password">
-                <Lock size={18} />
-                <span>Senha</span>
-              </label>
+            <div className="input-wrapper">
+              <div className="input-icon">
+                <Lock size={20} />
+              </div>
               <input
-                id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Digite sua senha"
+                placeholder="Senha"
                 required
                 autoComplete="current-password"
                 disabled={loading}
+                className="input-modern"
               />
             </div>
 
             {error && (
-              <div className="error-message">
+              <div className="error-banner">
                 <AlertCircle size={18} />
                 <span>{error}</span>
               </div>
             )}
 
-            <button type="submit" className="btn-login" disabled={loading}>
+            <button type="submit" className="btn-login-new" disabled={loading}>
               {loading ? 'Entrando...' : 'Entrar'}
             </button>
-          </form>
 
-          <div className="login-footer">
-            <p className="login-info">
-              <strong>Credenciais padrão:</strong><br />
-              Usuário: <code>myfinance</code><br />
-              Senha: <code>finance1234</code>
-            </p>
-          </div>
+            <div className="login-hint">
+              <div className="hint-label">Credenciais padrão</div>
+              <div className="hint-values">
+                <span><strong>Usuário:</strong> myfinance</span>
+                <span><strong>Senha:</strong> finance1234</span>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>

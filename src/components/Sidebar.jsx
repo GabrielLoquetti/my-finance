@@ -1,25 +1,37 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Calendar } from 'lucide-react'
+import { LayoutDashboard, Calendar, Target, X } from 'lucide-react'
 import { MESES } from '../context/FinanceContext'
 
-function Sidebar() {
+function Sidebar({ isOpen, onClose }) {
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isOpen ? 'sidebar-open' : ''}`}>
       <div className="sidebar-header">
         <div className="logo">
-          <div className="logo-icon">💰</div>
           <span className="logo-text">MyFinance</span>
         </div>
+        <button className="sidebar-close" onClick={onClose}>
+          <X size={24} />
+        </button>
       </div>
 
       <nav className="sidebar-nav">
         <NavLink
           to="/"
           end
+          onClick={onClose}
           className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
         >
           <LayoutDashboard size={20} />
           <span>Dashboard</span>
+        </NavLink>
+
+        <NavLink
+          to="/planning"
+          onClick={onClose}
+          className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+        >
+          <Target size={20} />
+          <span>Planejamento</span>
         </NavLink>
 
         <div className="nav-section">
@@ -33,6 +45,7 @@ function Sidebar() {
               <NavLink
                 key={index}
                 to={`/month/${index}`}
+                onClick={onClose}
                 className={({ isActive }) => `nav-item month-item ${isActive ? 'active' : ''}`}
               >
                 <span>{mes}</span>

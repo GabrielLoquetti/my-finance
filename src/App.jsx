@@ -2,9 +2,11 @@ import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Month from './pages/Month'
+import Planning from './pages/Planning'
 import Layout from './components/Layout'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { FinanceProvider } from './context/FinanceContext'
+import { ToastProvider } from './components/Toast'
 
 // Componente de rota protegida
 function ProtectedRoute({ children }) {
@@ -29,6 +31,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }>
           <Route index element={<Dashboard />} />
+          <Route path="planning" element={<Planning />} />
           <Route path="month/:monthIndex" element={<Month />} />
         </Route>
 
@@ -42,7 +45,9 @@ function App() {
   return (
     <AuthProvider>
       <FinanceProvider>
-        <AppRoutes />
+        <ToastProvider>
+          <AppRoutes />
+        </ToastProvider>
       </FinanceProvider>
     </AuthProvider>
   )

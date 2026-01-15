@@ -1,9 +1,9 @@
 import { useAuth } from '../context/AuthContext'
 import { useFinance } from '../context/FinanceContext'
-import { LogOut, Calendar } from 'lucide-react'
+import { LogOut, Calendar, Menu } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-function Header() {
+function Header({ onMenuClick }) {
   const { logout } = useAuth()
   const { selectedYear, setSelectedYear } = useFinance()
   const navigate = useNavigate()
@@ -18,9 +18,13 @@ function Header() {
   return (
     <header className="header">
       <div className="header-content">
+        <button className="menu-button" onClick={onMenuClick}>
+          <Menu size={24} />
+        </button>
+
         <div className="header-left">
-          <h1 className="header-title">Sistema de Gestão Financeira</h1>
-          <p className="header-subtitle">Controle completo das suas finanças pessoais</p>
+          <h1 className="header-title">MyFinance</h1>
+          <p className="header-subtitle">Gestão Financeira</p>
         </div>
 
         <div className="header-right">
