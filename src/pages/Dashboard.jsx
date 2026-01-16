@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useFinance, MESES } from '../context/FinanceContext'
 import { formatCurrency } from '../utils/formatters'
@@ -12,7 +11,6 @@ import {
 function Dashboard() {
   const navigate = useNavigate()
   const { calcularTotal, calcularSaldoAcumulado, selectedYear } = useFinance()
-  const [isMobile] = useState(window.innerWidth <= 768)
 
   const calcularTotaisAno = () => {
     let totalReceitas = 0
@@ -30,7 +28,6 @@ function Dashboard() {
 
   const { totalReceitas, totalDespesas, saldoFinal } = calcularTotaisAno()
 
-  // Dados por mês para o grid
   const getMesResumo = (index) => {
     const receitas = calcularTotal(index, 'receitas')
     const despesas = calcularTotal(index, 'despesasFixas') + calcularTotal(index, 'despesasVariaveis')
@@ -40,11 +37,10 @@ function Dashboard() {
 
   const mesAtual = new Date().getMonth()
 
-  // Mobile - Design minimalista
-  if (isMobile) {
-    return (
+  return (
+    <div className="dashboard-container">
+      {/* ===== MOBILE VIEW ===== */}
       <div className="mobile-dashboard">
-        {/* Hero minimalista */}
         <div className="mobile-hero">
           <div className="mobile-hero-balance">
             <span className="mobile-hero-label">Saldo {selectedYear}</span>
@@ -65,7 +61,6 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Grid de meses */}
         <div className="mobile-months-section">
           <h3 className="mobile-section-title">Meses</h3>
           <div className="mobile-months-grid">
@@ -90,7 +85,6 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Lista rápida dos últimos meses com dados */}
         <div className="mobile-recent-section">
           <h3 className="mobile-section-title">Resumo Recente</h3>
           {MESES.slice(0, mesAtual + 1).reverse().slice(0, 4).map((mes, idx) => {
@@ -116,101 +110,97 @@ function Dashboard() {
           })}
         </div>
       </div>
-    )
-  }
 
-  // Desktop - Design moderno e inovador
-  return (
-    <div className="desktop-dashboard">
-      {/* Header com gradiente */}
-      <div className="dashboard-header-card">
-        <div className="header-card-content">
-          <div className="header-card-left">
-            <div className="header-badge">
-              <Sparkles size={14} />
-              <span>Visão Geral</span>
+      {/* ===== DESKTOP VIEW ===== */}
+      <div className="desktop-dashboard">
+        <div className="dashboard-header-card">
+          <div className="header-card-content">
+            <div className="header-card-left">
+              <div className="header-badge">
+                <Sparkles size={14} />
+                <span>Visão Geral</span>
+              </div>
+              <h1 className="header-card-title">{selectedYear}</h1>
+              <p className="header-card-subtitle">Acompanhe suas finanças de forma inteligente</p>
             </div>
-            <h1 className="header-card-title">{selectedYear}</h1>
-            <p className="header-card-subtitle">Acompanhe suas finanças de forma inteligente</p>
-          </div>
-          <div className="header-card-right">
-            <div className="header-balance">
-              <span className="balance-label">Saldo Acumulado</span>
-              <span className={`balance-value ${saldoFinal >= 0 ? 'positive' : 'negative'}`}>
-                {formatCurrency(saldoFinal)}
-              </span>
+            <div className="header-card-right">
+              <div className="header-balance">
+                <span className="balance-label">Saldo Acumulado</span>
+                <span className={`balance-value ${saldoFinal >= 0 ? 'positive' : 'negative'}`}>
+                  {formatCurrency(saldoFinal)}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="header-stats-row">
-          <div className="header-stat">
-            <div className="stat-icon-wrapper positive">
-              <TrendingUp size={20} />
+          <div className="header-stats-row">
+            <div className="header-stat">
+              <div className="stat-icon-wrapper positive">
+                <TrendingUp size={20} />
+              </div>
+              <div className="stat-content">
+                <span className="stat-label">Receitas</span>
+                <span className="stat-value positive">{formatCurrency(totalReceitas)}</span>
+              </div>
             </div>
-            <div className="stat-content">
-              <span className="stat-label">Receitas</span>
-              <span className="stat-value positive">{formatCurrency(totalReceitas)}</span>
-            </div>
-          </div>
-          <div className="header-stat">
-            <div className="stat-icon-wrapper negative">
-              <TrendingDown size={20} />
-            </div>
-            <div className="stat-content">
-              <span className="stat-label">Despesas</span>
-              <span className="stat-value negative">{formatCurrency(totalDespesas)}</span>
+            <div className="header-stat">
+              <div className="stat-icon-wrapper negative">
+                <TrendingDown size={20} />
+              </div>
+              <div className="stat-content">
+                <span className="stat-label">Despesas</span>
+                <span className="stat-value negative">{formatCurrency(totalDespesas)}</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Grid de meses estilo calendário */}
-      <div className="months-calendar-section">
-        <h2 className="section-heading">Navegação por Mês</h2>
-        <div className="months-calendar-grid">
-          {MESES.map((mes, index) => {
-            const { receitas, despesas, saldo } = getMesResumo(index)
-            const isCurrentMonth = index === mesAtual
-            const hasData = receitas > 0 || despesas > 0
+        <div className="months-calendar-section">
+          <h2 className="section-heading">Navegação por Mês</h2>
+          <div className="months-calendar-grid">
+            {MESES.map((mes, index) => {
+              const { receitas, despesas, saldo } = getMesResumo(index)
+              const isCurrentMonth = index === mesAtual
+              const hasData = receitas > 0 || despesas > 0
 
-            return (
-              <button
-                key={index}
-                className={`month-calendar-card ${isCurrentMonth ? 'current' : ''} ${hasData ? 'has-data' : ''}`}
-                onClick={() => navigate(`/month/${index}`)}
-              >
-                <div className="month-card-header">
-                  <span className="month-card-name">{mes}</span>
-                  {isCurrentMonth && <span className="current-badge">Atual</span>}
-                </div>
-
-                {hasData ? (
-                  <div className="month-card-stats">
-                    <div className="month-mini-stat">
-                      <TrendingUp size={12} className="mini-icon positive" />
-                      <span>{formatCurrency(receitas)}</span>
-                    </div>
-                    <div className="month-mini-stat">
-                      <TrendingDown size={12} className="mini-icon negative" />
-                      <span>{formatCurrency(despesas)}</span>
-                    </div>
-                    <div className={`month-saldo ${saldo >= 0 ? 'positive' : 'negative'}`}>
-                      {formatCurrency(saldo)}
-                    </div>
+              return (
+                <button
+                  key={index}
+                  className={`month-calendar-card ${isCurrentMonth ? 'current' : ''} ${hasData ? 'has-data' : ''}`}
+                  onClick={() => navigate(`/month/${index}`)}
+                >
+                  <div className="month-card-header">
+                    <span className="month-card-name">{mes}</span>
+                    {isCurrentMonth && <span className="current-badge">Atual</span>}
                   </div>
-                ) : (
-                  <div className="month-empty">
-                    <span>Sem dados</span>
-                  </div>
-                )}
 
-                <div className="month-card-arrow">
-                  <ChevronRight size={18} />
-                </div>
-              </button>
-            )
-          })}
+                  {hasData ? (
+                    <div className="month-card-stats">
+                      <div className="month-mini-stat">
+                        <TrendingUp size={12} className="mini-icon positive" />
+                        <span>{formatCurrency(receitas)}</span>
+                      </div>
+                      <div className="month-mini-stat">
+                        <TrendingDown size={12} className="mini-icon negative" />
+                        <span>{formatCurrency(despesas)}</span>
+                      </div>
+                      <div className={`month-saldo ${saldo >= 0 ? 'positive' : 'negative'}`}>
+                        {formatCurrency(saldo)}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="month-empty">
+                      <span>Sem dados</span>
+                    </div>
+                  )}
+
+                  <div className="month-card-arrow">
+                    <ChevronRight size={18} />
+                  </div>
+                </button>
+              )
+            })}
+          </div>
         </div>
       </div>
     </div>

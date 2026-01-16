@@ -468,11 +468,23 @@ body {
 }
 
 /* ============================================
+   DASHBOARD CONTAINER
+============================================ */
+.dashboard-container {
+  width: 100%;
+}
+
+/* ============================================
    DASHBOARD DESKTOP - NOVO DESIGN
 ============================================ */
 .desktop-dashboard {
   max-width: 1400px;
   margin: 0 auto;
+  display: block;
+}
+
+.mobile-dashboard {
+  display: none;
 }
 
 .dashboard-header-card {
@@ -1901,12 +1913,12 @@ body {
 
   /* Dashboard desktop esconde no mobile */
   .desktop-dashboard {
-    display: none;
+    display: none !important;
   }
 
   /* Dashboard mobile mostra */
   .mobile-dashboard {
-    display: block;
+    display: block !important;
   }
 
   /* Página de mês */
@@ -2060,11 +2072,11 @@ body {
 ============================================ */
 @media (min-width: 769px) {
   .mobile-dashboard {
-    display: none;
+    display: none !important;
   }
 
   .desktop-dashboard {
-    display: block;
+    display: block !important;
   }
 }
 
